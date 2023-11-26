@@ -30,27 +30,18 @@ class Utils:
             with zipfile.ZipFile(self.__zip_file, 'r') as f:
                 f.extractall('.')
 
-    def get_dataset_path(self):
-        if os.path.exists(self.__dataset_path):
-            return self.__dataset_path
-        else:
-            print("Dataset does not exist")
-
-    def download_and_unzip_dataset(self):
-        self.__download_ml_1m_dataset()
-        self.__unzip_dataset()
-
     def __read_tables(self):
-        headings = [['user_id', 'gender', 'age', 'occupation', 'zip'],
-                    ['user_id', 'movie_id', 'rating', 'timestamp'],
-                    ['movie_id', 'title', 'genres']]
-
+        users_heading = ['user_id', 'gender', 'age', 'occupation', 'zip']
         users = pd.read_table(os.path.join(self.__dataset_path, 'users.dat'), sep='::',
-                              header=None, names=headings[0], engine='python')
+                              header=None, names=users_heading, engine='python')
+
+        ratings_heading = ['user_id', 'movie_id', 'rating', 'timestamp']
         ratings = pd.read_table(os.path.join(self.__dataset_path, 'ratings.dat'), sep='::',
-                                header=None, names=headings[1], engine='python')
+                                header=None, names=ratings_heading, engine='python')
+
+        movies_heading = ['movie_id', 'title', 'genres']
         movies = pd.read_table(os.path.join(self.__dataset_path, 'movies.dat'), sep='::',
-                               header=None, names=headings[2], engine='python', encoding='ISO-8859-1')
+                               header=None, names=movies_heading, engine='python', encoding='ISO-8859-1')
 
         return users, ratings, movies
 
