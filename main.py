@@ -50,17 +50,14 @@ params = {
     'seed': 7,
     'learning_rate': 0.05,
     'max_depth': 3,
-    'num_boost_round': 700,
     'eta': 0.3,
-    'nthread': 4,
+    'nthread': multiprocessing.cpu_count(),
     'objective': 'reg:squarederror',
     'subsample': 0.7,
     'colsample_bytree': 0.7,
-    'tree_method': 'hist'
+    'tree_method': 'hist',
+    'device': 'cuda' if torch.cuda.is_available() else 'cpu'
 }
-if torch.cuda.is_available():
-    params['device'] = 'cuda'
-params['nthread'] = multiprocessing.cpu_count()
 
 model_xgb = xgb.train(params, dtrain, num_boost_round=700)
 
