@@ -1,18 +1,12 @@
-from utils import Utils
-from scipy.sparse import csr_matrix
-from sklearn.neighbors import NearestNeighbors
-import xgboost as xgb
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error
-import torch
 import multiprocessing
 
-# https://www.kaggle.com/code/christine12/movielens-1m-dataset-python-pandas
-# from sklearn.metrics.pairwise import cosine_similarity
-# import numpy as np
-# from sklearn.neighbors import KNeighborsClassifier
-# file:///C:/Users/MSD/Desktop/ai%20papers/2021_Collaborative%20filtering%20recommendation%20algorithm.pdf
-# np.corrcoef pearson
+from utils import Utils
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+from sklearn.cluster import DBSCAN
+from scipy.sparse import csr_matrix
+from catboost import CatBoostRegressor
+import torch
 
 u = Utils()
 users, ratings, movies = u.prepare()
@@ -28,39 +22,30 @@ user_item_matrix = ratings.pivot(
 
 sparse_matrix = csr_matrix(user_item_matrix.values)
 
-model_knn = NearestNeighbors(metric='cosine', algorithm='brute', n_neighbors=20, n_jobs=-1)
-model_knn.fit(sparse_matrix)
-
-
-def predict_ratings(user_id, movie_id):
-    distances, indices = model_knn.kneighbors(
-        user_item_matrix.loc[movie_id].values.reshape(1, -1), n_neighbors=5)
-
-    neighbor_ratings = user_item_matrix.iloc[indices[0]].loc[:, user_id]
-    predicted_rating = neighbor_ratings.mean()
-    return predicted_rating
-
+dbscan = DBSCAN(eps=0.5, min_samples=5, metric='euclidean', n_jobs=-1)
+user_item_matrix_np = sparse_matrix.toarray()
+clusters = dbscan.fit_predict(user_item_matrix_np.T)
 
 train_data, test_data = train_test_split(ratings, test_size=0.2, random_state=7)
 
-dtrain = xgb.DMatrix(train_data[['user_id', 'movie_id']], label=train_data['rating'])
-dtest = xgb.DMatrix(test_data[['user_id', 'movie_id']], label=test_data['rating'])
+model_catboost = CatBoostRegressor(
+    iterations=700,
+    learning_rate=0.05,
+    depth=3,
+    random_seed=7,
+    thread_count=multiprocessing.cpu_count(),
+    bootstrap_type='Bernoulli',
+    subsample=0.7,
+    colsample_bylevel=0.7,
+    # task_type='GPU' if torch.cuda.is_available() else 'CPU'
+)
 
-params = {
-    'seed': 7,
-    'learning_rate': 0.05,
-    'max_depth': 3,
-    'eta': 0.3,
-    'nthread': multiprocessing.cpu_count(),
-    'objective': 'reg:squarederror',
-    'subsample': 0.7,
-    'colsample_bytree': 0.7,
-    'tree_method': 'hist',
-    'device': 'cuda' if torch.cuda.is_available() else 'cpu'
-}
+model_catboost.fit(
+    train_data[['user_id', 'movie_id']],
+    train_data['rating'],
+    verbose=False
+)
 
-model_xgb = xgb.train(params, dtrain, num_boost_round=700)
-
-predictions = model_xgb.predict(dtest)
+predictions = model_catboost.predict(test_data[['user_id', 'movie_id']])
 rmse = mean_squared_error(test_data['rating'], predictions, squared=False)
 print(f'RMSE: {rmse}')
