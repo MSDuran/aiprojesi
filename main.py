@@ -1,15 +1,15 @@
 import multiprocessing
-
 from utils import Utils
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 from sklearn.cluster import DBSCAN
 from scipy.sparse import csr_matrix
 from catboost import CatBoostRegressor
-import torch
+from comparison import Comparison
 
 u = Utils()
 users, ratings, movies = u.prepare()
+
 print(users.head())
 print(ratings.head())
 print(movies.head())
@@ -18,7 +18,9 @@ user_item_matrix = ratings.pivot(
     index='movie_id',
     columns='user_id',
     values='rating'
-).fillna(0)
+)
+# Median Imputation (MD) method
+user_item_matrix = user_item_matrix.apply(lambda x: x.fillna(x.median()), axis=0)
 
 sparse_matrix = csr_matrix(user_item_matrix.values)
 
@@ -36,8 +38,7 @@ model_catboost = CatBoostRegressor(
     thread_count=multiprocessing.cpu_count(),
     bootstrap_type='Bernoulli',
     subsample=0.7,
-    colsample_bylevel=0.7,
-    # task_type='GPU' if torch.cuda.is_available() else 'CPU'
+    colsample_bylevel=0.7
 )
 
 model_catboost.fit(
@@ -48,4 +49,10 @@ model_catboost.fit(
 
 predictions = model_catboost.predict(test_data[['user_id', 'movie_id']])
 rmse = mean_squared_error(test_data['rating'], predictions, squared=False)
+mae = mean_absolute_error(test_data['rating'], predictions)
+
 print(f'RMSE: {rmse}')
+print(f'MAE: {mae}')
+
+c = Comparison()
+c.show_plot('my_method', mae, rmse, True)
