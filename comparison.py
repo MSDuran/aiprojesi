@@ -21,6 +21,7 @@ class Comparison:
 
         x = range(len(self.data))
         fig, ax = plt.subplots()
+        plt.subplots_adjust(bottom=0.3)
 
         bar_width = 0.35
         ax.bar(x, self.data['MAE'], width=bar_width, align='center', label='MAE')
