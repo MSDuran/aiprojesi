@@ -31,14 +31,16 @@ clusters = dbscan.fit_predict(user_item_matrix_np.T)
 train_data, test_data = train_test_split(ratings, test_size=0.2, random_state=7)
 
 model_catboost = CatBoostRegressor(
-    iterations=700,
-    learning_rate=0.05,
-    depth=3,
+    iterations=5000,
+    learning_rate=0.01,
+    depth=8,
     random_seed=7,
     thread_count=multiprocessing.cpu_count(),
-    bootstrap_type='Bernoulli',
-    subsample=0.7,
-    colsample_bylevel=0.7
+    bootstrap_type='MVS',
+    subsample=0.8,
+    task_type='GPU',
+    early_stopping_rounds=10,
+    l2_leaf_reg=3
 )
 
 model_catboost.fit(
