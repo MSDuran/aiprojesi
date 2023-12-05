@@ -6,6 +6,8 @@ class Comparison:
     def __init__(self):
         # https://www.researchgate.net/publication/311430762_Extracting_Implicit_Social_Relation_for_Social_Recommendation_Techniques_in_User_Rating_Prediction
         # https://www.researchgate.net/figure/Comparing-MAE-and-RMSE-in-theMovieLens-100K-datasets_fig3_311430762
+        # https://www.researchgate.net/publication/358451271_A_hinge-loss_based_codebook_transfer_for_cross-domain_recommendation_with_non-overlapping_data
+        # https://www.mdpi.com/2073-431X/10/10/123
         self.data = pd.DataFrame({
             'Algorithm': ['GlobalAvg', 'UserAvg', 'ItemAvg', 'SlopeOne', 'UserKNN', 'ItemKNN',
                           'RegSVD', 'BiasedMF', 'SVD++1', 'SVD++2', 'Hell-TrustSVD1', 'Hell-TrustSVD2', 'MMMF',
