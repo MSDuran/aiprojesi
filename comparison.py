@@ -8,9 +8,12 @@ class Comparison:
         # https://www.researchgate.net/figure/Comparing-MAE-and-RMSE-in-theMovieLens-100K-datasets_fig3_311430762
         self.data = pd.DataFrame({
             'Algorithm': ['GlobalAvg', 'UserAvg', 'ItemAvg', 'SlopeOne', 'UserKNN', 'ItemKNN',
-                          'RegSVD', 'BiasedMF', 'SVD++1', 'SVD++2', 'Hell-TrustSVD1', 'Hell-TrustSVD2'],
-            'MAE': [0.944, 0.835, 0.817, 0.738, 0.735, 0.725, 0.733, 0.72, 0.72, 0.719, 0.716, 0.716],
-            'RMSE': [1.125, 1.042, 1.024, 0.939, 0.942, 0.925, 0.928, 0.914, 0.921, 0.914, 0.909, 0.909]
+                          'RegSVD', 'BiasedMF', 'SVD++1', 'SVD++2', 'Hell-TrustSVD1', 'Hell-TrustSVD2', 'MMMF',
+                          'MINDTL', 'TRACER', 'CBT', 'UPCSim', 'CB-UPCSim'],
+            'MAE': [0.944, 0.835, 0.817, 0.738, 0.735, 0.725, 0.733, 0.72, 0.72, 0.719, 0.716, 0.716, 0.6402, 0.7965,
+                    0.8039, 0.7746, 0.6993, 0.6857],
+            'RMSE': [1.125, 1.042, 1.024, 0.939, 0.942, 0.925, 0.928, 0.914, 0.921, 0.914, 0.909, 0.909, 0.9361, 0.9948,
+                     0.9800, 0.9676, 0.8921, 0.8784]
         })
 
     def show_plot(self, algorithm_name=None, mae_value=None, rmse_value=None, save_plot=False):
