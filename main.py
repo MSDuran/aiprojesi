@@ -7,8 +7,11 @@ from sklearn.cluster import DBSCAN
 from scipy.sparse import csr_matrix
 from catboost import CatBoostRegressor
 from comparison import Comparison
+from dataset import Dataset
 
-u = Utils()
+ds = Dataset.movielens_1m
+
+u = Utils(ds)
 users, ratings, movies = u.prepare()
 
 print(users.head())
@@ -65,5 +68,5 @@ mae = mean_absolute_error(test_data['rating'], predictions)
 print(f'RMSE: {rmse}')
 print(f'MAE: {mae}')
 
-c = Comparison()
+c = Comparison(ds)
 c.show_plot('my_method', mae, rmse, True)
