@@ -71,24 +71,25 @@ model_catboost = CatBoostRegressor(
 
 # fixme:: run grid search with more params to get better results.
 # current best rmse= 0.916 mae= 0.721
-param_grid = {
-    'learning_rate': [0.01, 0.03, 0.05],
-    'depth': [6, 8, 10],
-    'l2_leaf_reg': [1, 3, 5]
-}
+# param_grid = {
+#     'learning_rate': [0.01, 0.03, 0.05],
+#     'depth': [6, 8, 10],
+#     'l2_leaf_reg': [1, 3, 5]
+# }
 
 
-grid_search = GridSearchCV(model_catboost, param_grid, cv=3, scoring='neg_mean_squared_error', n_jobs=-1)
-grid_search.fit(
+#grid_search = GridSearchCV(model_catboost, param_grid, cv=3, scoring='neg_mean_squared_error', n_jobs=-1)
+model_catboost.fit(
     train_data[['user_id', 'movie_id', 'cluster_id', 'user_avg_rating', 'user_rating_count', 'movie_avg_rating',
                 'movie_rating_count']],
     train_data['rating'],
     verbose=False
 )
 
-best_model = grid_search.best_estimator_
-print(grid_search.best_params_)
-predictions = best_model.predict(test_data[['user_id', 'movie_id', 'cluster_id', 'user_avg_rating', 'user_rating_count',
+# best_model = grid_search.best_estimator_
+# print(grid_search.best_params_)
+print(model_catboost.get_params())
+predictions = model_catboost.predict(test_data[['user_id', 'movie_id', 'cluster_id', 'user_avg_rating', 'user_rating_count',
                                             'movie_avg_rating', 'movie_rating_count']])
 
 rmse = mean_squared_error(test_data['rating'], predictions, squared=False)
