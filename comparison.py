@@ -22,11 +22,11 @@ class Comparison:
         self.__100k_table = pd.DataFrame({
             'Algorithm': ['GlobalAvg', 'UserAvg', 'ItemAvg', 'SlopeOne', 'UserKNN', 'ItemKNN',
                           'RegSVD', 'BiasedMF', 'SVD++1', 'SVD++2', 'Hell-TrustSVD1', 'Hell-TrustSVD2', 'MMMF',
-                          'MINDTL', 'TRACER', 'CBT', 'MMMF', 'MINDTL', 'TRACER', 'CBT'],
+                          'MINDTL', 'TRACER', 'CBT', 'MMMF', 'MINDTL', 'TRACER', 'CBT', 'KNN', 'Co-Clustering'],
             'MAE': [0.944, 0.835, 0.817, 0.738, 0.735, 0.725, 0.733, 0.72, 0.72, 0.719, 0.716, 0.716, 0.6402, 0.7965,
-                    0.8039, 0.7746, 0.6808, 1.6538, 0.8213, 0.8239],
+                    0.8039, 0.7746, 0.6808, 1.6538, 0.8213, 0.8239, 0.7732, 0.7582],
             'RMSE': [1.125, 1.042, 1.024, 0.939, 0.942, 0.925, 0.928, 0.914, 0.921, 0.914, 0.909, 0.909, 0.9361, 0.9948,
-                     0.9800, 0.9676, 0.9828, 1.9026, 1.0027, 1.0264]
+                     0.9800, 0.9676, 0.9828, 1.9026, 1.0027, 1.0264, 0.979, 0.9675]
         })
         self.__1m_table = pd.DataFrame({
             'Algorithm': ['MMMF', 'MINDTL', 'TRACER', 'CBT', 'BMF', 'DeepFM', 'deepCF', 'lCoupledCF', 'gCoupledCF',
