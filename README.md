@@ -1,0 +1,6 @@
+## Collaborative filtering recommendation algorithm based on DBSCAN and CatBoost
+
+### Experimental Results:
+
+
+<img src="https://github.com/MSDuran/aiprojesi/blob/master/result_100K.png?raw=true" width="400"/> <img src="https://github.com/MSDuran/aiprojesi/blob/master/result_1M.png?raw=true" width="400"/>
