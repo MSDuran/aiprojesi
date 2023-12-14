@@ -14,6 +14,7 @@ class Comparison:
         # https://www.researchgate.net/publication/335440931_A_Generic_Framework_for_Learning_Explicit_and_Implicit_User-Item_Couplings_in_Recommendation/figures?lo=1
 
         # Movielens 1M
+        # https://www.researchgate.net/publication/311430762_Extracting_Implicit_Social_Relation_for_Social_Recommendation_Techniques_in_User_Rating_Prediction
         # https://www.researchgate.net/publication/358451271_A_hinge-loss_based_codebook_transfer_for_cross-domain_recommendation_with_non-overlapping_data
         # https://www.mdpi.com/2073-431X/10/10/123
         # https://www.researchgate.net/publication/335440931_A_Generic_Framework_for_Learning_Explicit_and_Implicit_User-Item_Couplings_in_Recommendation/figures?lo=1
@@ -30,9 +31,12 @@ class Comparison:
         })
         self.__1m_table = pd.DataFrame({
             'Algorithm': ['MMMF', 'MINDTL', 'TRACER', 'CBT', 'BMF', 'DeepFM', 'deepCF', 'lCoupledCF', 'gCoupledCF',
-                          'CoupledCF', 'UPCSim', 'CB-UPCSim'],
-            'MAE': [0.6389, 1.5984, 0.8145, 0.8725, 0.7929, 0.7452, 0.7264, 0.9462, 0.7467, 0.7285, 0.6993, 0.6857],
-            'RMSE': [0.9349, 1.8545, 0.9892, 1.0729, 1.1334, 0.9504, 0.9304, 1.1484, 0.9406, 0.9295, 0.8921, 0.8784]
+                          'CoupledCF', 'UPCSim', 'CB-UPCSim', 'GlobalAvg', 'UserAvg', 'ItemAvg', 'SlopeOne', 'RegSVD',
+                          'BiasedMF', 'SVD++1', 'SVD++2', 'Hell-TrustSVD1', 'Hell-TrustSVD2'],
+            'MAE': [0.6389, 1.5984, 0.8145, 0.8725, 0.7929, 0.7452, 0.7264, 0.9462, 0.7467, 0.7285, 0.6993, 0.6857,
+                    0.933, 0.828, 0.782, 0.711, 0.698, 0.688, 0.694, 0.685, 0.675, 0.676],
+            'RMSE': [0.9349, 1.8545, 0.9892, 1.0729, 1.1334, 0.9504, 0.9304, 1.1484, 0.9406, 0.9295, 0.8921, 0.8784,
+                     1.117, 1.035, 0.979, 0.902, 0.877, 0.869, 0.879, 0.866, 0.861, 0.865]
         })
         if self.__selected_ds is Dataset.movielens_100k.value[0]:
             self.title_text = '100K'
